@@ -48,16 +48,24 @@ app.use(express.urlencoded({ extended: true }));
 // Middleware to ensure DB connection before handling requests
 // Skip DB connection for health check
 app.use(async (req, res, next) => {
-  if (req.path !== '/api/health') {
+  if (req.path !== '/health') {
     await ensureDBConnection();
   }
   next();
 });
 
-// Routes - Vercel routes /api/* to this function, so paths include /api
+// Routes - these are used by both local dev (port 5000) and Vercel serverless (/api/*)
+// For local dev: requests come to /api/auth, /api/events, /api/registrations
+// For Vercel: /api prefix is stripped by handler, so routes should be /auth, /events, /registrations
+// To support both, we register with /api prefix here
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/registrations', registrationRoutes);
+
+// Also register without /api for serverless compatibility
+app.use('/auth', authRoutes);
+app.use('/events', eventRoutes);
+app.use('/registrations', registrationRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -76,7 +84,17 @@ app.get('/', (req, res) => {
 });
 
 // Health check (doesn't require DB connection)
+// Support both /api/health and /health for serverless
 app.get('/api/health', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Server is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+  });
+});
+
+app.get('/health', (req, res) => {
   res.json({
     success: true,
     message: 'Server is running',
