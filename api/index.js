@@ -1,10 +1,7 @@
 // Vercel serverless function entry point
 import app from '../backend/server.js';
 
-// Vercel runtime config
-export const config = {
-  runtime: 'nodejs24.x'
-};
+// (runtime configured in root vercel.json)
 
 // Export handler for Vercel
 // This function will be called for all /api/* requests
