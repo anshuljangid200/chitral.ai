@@ -38,8 +38,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Middleware to ensure DB connection before handling requests
+// Skip DB connection for health check
 app.use(async (req, res, next) => {
-  await ensureDBConnection();
+  if (req.path !== '/api/health') {
+    await ensureDBConnection();
+  }
   next();
 });
 
