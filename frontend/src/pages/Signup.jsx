@@ -49,10 +49,23 @@ const Signup = () => {
       setAuth(token, user);
       navigate('/dashboard');
     } catch (err) {
-      const errorMessage =
-        err.response?.data?.message ||
-        err.response?.data?.errors?.join(', ') ||
-        'Signup failed. Please try again.';
+      let errorMessage = 'Signup failed. Please try again.';
+      
+      // Log full error for debugging
+      console.error('[Signup Error]', {
+        status: err.response?.status,
+        data: err.response?.data,
+        message: err.message,
+      });
+      
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.response?.data?.errors) {
+        errorMessage = err.response.data.errors.join(', ');
+      } else if (err.message === 'Network Error' || !err.response) {
+        errorMessage = 'Cannot connect to server. Check your internet connection and try again.';
+      }
+      
       setError(errorMessage);
     } finally {
       setLoading(false);

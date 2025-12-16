@@ -3,6 +3,7 @@ import { generateToken } from '../config/jwt.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 export const signup = asyncHandler(async (req, res) => {
+  console.log('[AUTH] Signup request:', { email: req.body.email });
   const { name, email, password } = req.body;
 
   // Check if user already exists
@@ -40,6 +41,7 @@ export const signup = asyncHandler(async (req, res) => {
 });
 
 export const login = asyncHandler(async (req, res) => {
+  console.log('[AUTH] Login request:', { email: req.body.email });
   const { email, password } = req.body;
 
   // Find user with password

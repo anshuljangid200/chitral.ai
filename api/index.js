@@ -1,6 +1,6 @@
 // Vercel serverless function entry point
 import serverless from 'serverless-http';
-import app from '../server.js';
+import app from '../backend/server.js';
 
 // Set Vercel environment flag
 process.env.VERCEL = '1';
@@ -10,3 +10,4 @@ const handler = serverless(app);
 
 // Export for Vercel
 export default handler;
+

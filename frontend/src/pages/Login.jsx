@@ -35,9 +35,22 @@ const Login = () => {
       setAuth(token, user);
       navigate('/dashboard');
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Login failed. Please try again.'
-      );
+      let errorMessage = 'Login failed. Please try again.';
+      
+      // Log full error for debugging
+      console.error('[Login Error]', {
+        status: err.response?.status,
+        data: err.response?.data,
+        message: err.message,
+      });
+      
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message === 'Network Error' || !err.response) {
+        errorMessage = 'Cannot connect to server. Check your internet connection and try again.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
