@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import Alert from '../components/Alert';
 import Loading from '../components/Loading';
+import MainLayout from '../components/MainLayout';
 
 const EventRegistrations = () => {
   const { id } = useParams();
@@ -57,146 +58,166 @@ const EventRegistrations = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <MainLayout
+      title={event?.title || 'Event registrations'}
+      subtitle="Review attendees, approve or reject manual requests, and keep track of event demand."
+      actions={
         <button
           onClick={() => navigate('/dashboard')}
-          className="mb-4 text-blue-600 hover:text-blue-700"
+          className="inline-flex items-center rounded-md border border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-200 hover:bg-slate-800"
         >
-          ← Back to Dashboard
+          ← Back to dashboard
         </button>
+      }
+    >
+      {event && (
+        <div className="mb-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5">
+          <h1 className="text-lg font-semibold text-slate-50 mb-2">
+            {event.title}
+          </h1>
+          <p className="text-xs text-slate-400 mb-3 line-clamp-3">
+            {event.description}
+          </p>
+        </div>
+      )}
 
-        {event && (
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h1>
-            <p className="text-gray-600">{event.description}</p>
+      {stats && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+            <p className="text-xs text-slate-400">Total</p>
+            <p className="mt-2 text-2xl font-semibold text-slate-50">
+              {stats.total}
+            </p>
           </div>
-        )}
-
-        {stats && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-white rounded-lg shadow p-4">
-              <p className="text-sm text-gray-600">Total</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
-            </div>
-            <div className="bg-yellow-50 rounded-lg shadow p-4">
-              <p className="text-sm text-yellow-600">Pending</p>
-              <p className="text-2xl font-bold text-yellow-700">{stats.pending}</p>
-            </div>
-            <div className="bg-green-50 rounded-lg shadow p-4">
-              <p className="text-sm text-green-600">Approved</p>
-              <p className="text-2xl font-bold text-green-700">{stats.approved}</p>
-            </div>
-            <div className="bg-red-50 rounded-lg shadow p-4">
-              <p className="text-sm text-red-600">Rejected</p>
-              <p className="text-2xl font-bold text-red-700">{stats.rejected}</p>
-            </div>
+          <div className="rounded-xl border border-amber-500/40 bg-amber-500/5 p-4">
+            <p className="text-xs text-amber-300">Pending</p>
+            <p className="mt-2 text-2xl font-semibold text-amber-200">
+              {stats.pending}
+            </p>
           </div>
-        )}
+          <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/5 p-4">
+            <p className="text-xs text-emerald-300">Approved</p>
+            <p className="mt-2 text-2xl font-semibold text-emerald-200">
+              {stats.approved}
+            </p>
+          </div>
+          <div className="rounded-xl border border-red-500/40 bg-red-500/5 p-4">
+            <p className="text-xs text-red-300">Rejected</p>
+            <p className="mt-2 text-2xl font-semibold text-red-200">
+              {stats.rejected}
+            </p>
+          </div>
+        </div>
+      )}
 
-        {error && (
+      {error && (
+        <div className="mb-4">
           <Alert type="error" message={error} onClose={() => setError('')} />
-        )}
+        </div>
+      )}
 
-        {registrations.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-8 text-center">
-            <p className="text-gray-500">No registrations yet.</p>
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+      {registrations.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 p-8 text-center">
+          <p className="text-sm text-slate-300 mb-1">No registrations yet.</p>
+          <p className="text-xs text-slate-500">
+            Share the public event link with your attendees to start collecting
+            registrations.
+          </p>
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-800 text-xs">
+              <thead className="bg-slate-900/80">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Ticket ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Registered
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {registrations.map((registration) => (
-                    <tr key={registration._id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {registration.userName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {registration.userEmail}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
-                        {registration.ticketId}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span
-                          className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                            registration.status === 'approved'
-                              ? 'bg-green-100 text-green-800'
-                              : registration.status === 'rejected'
-                              ? 'bg-red-100 text-red-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                          }`}
-                        >
-                          {registration.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {formatDate(registration.createdAt)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {registration.status === 'pending' && (
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() =>
-                                handleStatusUpdate(registration._id, 'approved')
-                              }
-                              className="text-green-600 hover:text-green-900"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleStatusUpdate(registration._id, 'rejected')
-                              }
-                              className="text-red-600 hover:text-red-900"
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        )}
-                        {registration.status === 'approved' && (
-                          <a
-                            href={`/ticket/${registration.ticketId}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:text-blue-900"
+                  <th className="px-4 py-3 text-left font-medium text-slate-300 uppercase tracking-wide">
+                    Name
+                  </th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-300 uppercase tracking-wide">
+                    Email
+                  </th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-300 uppercase tracking-wide">
+                    Ticket ID
+                  </th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-300 uppercase tracking-wide">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-300 uppercase tracking-wide">
+                    Registered
+                  </th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-300 uppercase tracking-wide">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800 bg-slate-950/40">
+                {registrations.map((registration) => (
+                  <tr key={registration._id} className="hover:bg-slate-900/60">
+                    <td className="px-4 py-3 whitespace-nowrap text-slate-100">
+                      {registration.userName}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-slate-300">
+                      {registration.userEmail}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-slate-300 font-mono text-[11px]">
+                      {registration.ticketId}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <span
+                        className={`px-2 py-1 text-[11px] font-semibold rounded-full ${
+                          registration.status === 'approved'
+                            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40'
+                            : registration.status === 'rejected'
+                            ? 'bg-red-500/10 text-red-300 border border-red-500/40'
+                            : 'bg-amber-500/10 text-amber-200 border border-amber-500/40'
+                        }`}
+                      >
+                        {registration.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-slate-300">
+                      {formatDate(registration.createdAt)}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-xs font-medium">
+                      {registration.status === 'pending' && (
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() =>
+                              handleStatusUpdate(registration._id, 'approved')
+                            }
+                            className="text-emerald-300 hover:text-emerald-200"
                           >
-                            View Ticket
-                          </a>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                            Approve
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleStatusUpdate(registration._id, 'rejected')
+                            }
+                            className="text-red-300 hover:text-red-200"
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                      {registration.status === 'approved' && (
+                        <a
+                          href={`/ticket/${registration.ticketId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-300 hover:text-blue-200"
+                        >
+                          View ticket
+                        </a>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </MainLayout>
   );
 };
 

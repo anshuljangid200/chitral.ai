@@ -64,100 +64,147 @@ const Signup = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your organizer account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link
-              to="/login"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              sign in to your existing account
-            </Link>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-4">
+      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        {/* Brand side */}
+        <div className="hidden md:block">
+          <div className="mb-6 inline-flex items-center space-x-2">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-blue-500 to-indigo-400 flex items-center justify-center text-xs font-bold">
+              ET
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-100">
+                Event Ticketing
+              </p>
+              <p className="text-xs text-slate-400">
+                Trusted by modern organizers
+              </p>
+            </div>
+          </div>
+          <h1 className="text-3xl font-semibold text-slate-50 mb-4">
+            Create your organizer workspace in minutes.
+          </h1>
+          <p className="text-sm text-slate-400 mb-6 max-w-md">
+            Powerful enough for production workloads, simple enough to use for
+            your next launch, meetup, or conference.
+          </p>
+          <p className="text-xs text-slate-500 max-w-md">
+            Your account is organizer-only. There is no public login — attendees
+            register via public event links and receive secure tickets.
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && <Alert type="error" message={error} />}
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Password (min 6 characters)"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Creating account...' : 'Create account'}
-            </button>
+        {/* Signup card */}
+        <div className="max-w-md w-full mx-auto">
+          <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6 shadow-xl backdrop-blur">
+            <h2 className="text-xl font-semibold text-slate-50 text-center mb-1">
+              Create organizer account
+            </h2>
+            <p className="text-xs text-slate-400 text-center mb-6">
+              Set up your organizer profile to start creating and managing
+              events.
+            </p>
+
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              {error && <Alert type="error" message={error} />}
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block text-xs font-medium text-slate-300 mb-1.5"
+                  >
+                    Full name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="e.g. Chitral Sharma"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-xs font-medium text-slate-300 mb-1.5"
+                  >
+                    Work email
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="you@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-xs font-medium text-slate-300 mb-1.5"
+                  >
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Minimum 6 characters"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-xs font-medium text-slate-300 mb-1.5"
+                  >
+                    Confirm password
+                  </label>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="Re-enter password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-2 inline-flex w-full justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Creating account...' : 'Create account'}
+              </button>
+
+              <p className="text-xs text-slate-400 text-center mt-4">
+                Already have an account?{' '}
+                <Link
+                  to="/login"
+                  className="font-medium text-blue-400 hover:text-blue-300"
+                >
+                  Sign in instead
+                </Link>
+              </p>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
